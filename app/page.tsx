@@ -31,7 +31,7 @@ export default function Home() {
       {/* Vibhava Logo */}
       <div className="absolute top-6 left-6 w-40 h-auto">
         <Image 
-          src="/vibhava-logo-1.png" 
+          src="/whitelogo.png" 
           alt="Vibhava Logo" 
           width={160} 
           height={80} 

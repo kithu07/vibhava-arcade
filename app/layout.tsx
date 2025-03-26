@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Arcade Leaderboard",
   description: "Track your scores and compete in the arcade",
-  generator: 'v0.dev'
 };
 
 export default function RootLayout({
@@ -58,10 +57,16 @@ export default function RootLayout({
                   <ExternalLink className="h-3 w-3 ml-0.5 opacity-70 group-hover:opacity-100 transition-opacity" />
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-                <span className="relative group">
+                <a 
+                  href="https://mishalfaisal.framer.website/" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative group flex items-center"
+                >
                   <span className="font-medium text-primary hover:text-primary/90 transition-colors duration-200">Mishal</span>
+                  <ExternalLink className="h-3 w-3 ml-0.5 opacity-70 group-hover:opacity-100 transition-opacity" />
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-green-500 transition-all duration-300 group-hover:w-full"></span>
-                </span>
+                </a>
               </div>
             </div>
           </footer>
