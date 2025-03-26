@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Gamepad2, QrCode, Trophy, Users } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 export default function Home() {
@@ -26,9 +27,20 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen arcade-bg flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen arcade-bg flex flex-col items-center justify-center p-4 relative">
+      {/* Vibhava Logo */}
+      <div className="absolute top-6 left-6 w-40 h-auto">
+        <Image 
+          src="/vibhava-logo-1.png" 
+          alt="Vibhava Logo" 
+          width={160} 
+          height={80} 
+          priority
+        />
+      </div>
+      
       <div className="text-center mb-8 fade-in">
-        <h1 className="text-4xl md:text-6xl font-bold neon-text mb-2">ARCADE MASTER</h1>
+        <h1 className="text-4xl md:text-6xl font-bold neon-text mb-2">ARCADE</h1>
         <p className="text-primary text-lg md:text-xl">Track your scores. Claim your glory.</p>
       </div>
 
