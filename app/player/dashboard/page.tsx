@@ -43,6 +43,8 @@ export default function PlayerDashboard() {
   const [rank, setRank] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [leaderboardData, setLeaderboardData] = useState<Player[]>([])
+  const [isLeaderboardLoading, setIsLeaderboardLoading] = useState(true)
 
   // Fetch games from API
   const fetchGames = async () => {
@@ -62,17 +64,22 @@ export default function PlayerDashboard() {
   // Fetch player data from API
   const fetchPlayerData = async (id: string) => {
     try {
+      console.log("Fetching player data with ID:", id);
       const response = await fetch(`/api/players/${id}`);
       
       if (!response.ok) {
         if (response.status === 404) {
+          console.error("Player not found with ID:", id);
           setError("Player not found. Please log in again.");
+          localStorage.removeItem("arcadePlayerId");
+          localStorage.removeItem("arcadePlayerName");
           return null;
         }
         throw new Error('Failed to fetch player data');
       }
       
       const data = await response.json();
+      console.log("Player data received:", data);
       setPlayer(data);
       return data;
     } catch (error) {
@@ -101,6 +108,32 @@ export default function PlayerDashboard() {
     }
   };
 
+  // Add a function to fetch leaderboard data
+  const fetchLeaderboard = async () => {
+    try {
+      setIsLeaderboardLoading(true)
+      const response = await fetch('/api/players')
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch leaderboard')
+      }
+      
+      const data = await response.json()
+      console.log("Leaderboard data:", data)
+      
+      // Sort by total score (the API should already return sorted data)
+      const sortedData = data.sort((a: Player, b: Player) => 
+        (b.totalScore || 0) - (a.totalScore || 0)
+      )
+      
+      setLeaderboardData(sortedData)
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error)
+    } finally {
+      setIsLeaderboardLoading(false)
+    }
+  }
+
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
@@ -110,20 +143,27 @@ export default function PlayerDashboard() {
         const id = localStorage.getItem("arcadePlayerId")
         const name = localStorage.getItem("arcadePlayerName")
 
-        if (!id || !name) {
+        if (!id) {
+          console.log("No player ID found, redirecting to login");
           router.push("/login/player")
           return
         }
 
+        console.log("Using player ID from storage:", id);
         setPlayerId(id)
-        setPlayerName(name)
+        if (name) setPlayerName(name)
 
-        // Fetch games and player data
+        // Fetch games and player data and leaderboard
         await Promise.all([
           fetchGames(),
           fetchPlayerData(id).then(player => {
             if (player) {
-              fetchRank(id);
+              fetchRank(player._id);
+              // Also fetch leaderboard data
+              fetchLeaderboard();
+            } else {
+              console.log("No player data returned, redirecting to login");
+              router.push("/login/player");
             }
           })
         ]);
@@ -352,11 +392,53 @@ export default function PlayerDashboard() {
                   <CardDescription>Top players across all games</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <p className="text-center text-sm text-muted-foreground mb-4">
-                      Loading top players...
+                  {isLeaderboardLoading ? (
+                    <div className="flex justify-center p-6">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+                    </div>
+                  ) : leaderboardData.length === 0 ? (
+                    <p className="text-center text-sm text-muted-foreground py-4">
+                      No players found
                     </p>
-                  </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {leaderboardData.slice(0, 10).map((leaderPlayer, index) => {
+                        const isCurrentPlayer = playerId === leaderPlayer.playerId || 
+                          playerId === leaderPlayer._id;
+                        
+                        return (
+                          <div 
+                            key={leaderPlayer._id} 
+                            className={`flex items-center p-3 rounded-lg ${
+                              isCurrentPlayer ? "bg-primary/10 border border-primary/30" : "bg-muted/30"
+                            }`}
+                          >
+                            <div className={`w-8 h-8 flex items-center justify-center rounded-full mr-3 ${
+                              index < 3 ? 
+                                index === 0 ? "bg-yellow-500/20 text-yellow-500" : 
+                                index === 1 ? "bg-gray-300/20 text-gray-300" : 
+                                "bg-amber-600/20 text-amber-600" 
+                                : "bg-muted text-muted-foreground"
+                            }`}>
+                              {index + 1}
+                            </div>
+                            <div className="flex-1">
+                              <div className={`font-medium ${isCurrentPlayer ? "text-primary" : ""}`}>
+                                {leaderPlayer.name}
+                                {isCurrentPlayer && " (You)"}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className={`text-lg font-bold ${isCurrentPlayer ? "text-primary" : ""}`}>
+                                {leaderPlayer.totalScore || 0}
+                              </div>
+                              <div className="text-xs text-muted-foreground">points</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

@@ -20,29 +20,52 @@ export default function PlayerLogin() {
   const [phone, setPhone] = useState("")
   const [playerId, setPlayerId] = useState("")
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setIsLoading(true)
 
     if (!name || !phone) {
       setError("Please fill in all fields")
+      setIsLoading(false)
       return
     }
 
     try {
-      // In a real app, this would be an API call to register/login the player
-      // For demo purposes, we'll just generate a random ID
-      const id = `player_${Date.now()}_${Math.floor(Math.random() * 1000)}`
-      setPlayerId(id)
-      setStep("qrcode")
+      // Submit to the API to create or find a player
+      const response = await fetch('/api/players', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phone }),
+      })
 
-      // In a real app, you would save this to the database
-      localStorage.setItem("arcadePlayerId", id)
-      localStorage.setItem("arcadePlayerName", name)
-      localStorage.setItem("arcadePlayerPhone", phone)
-    } catch (err) {
-      setError("Failed to register. Please try again.")
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to register player')
+      }
+
+      const data = await response.json()
+      console.log("Player data received:", data)
+      
+      // Use the ID returned from the server
+      const playerIdToUse = data.playerId || data._id
+      setPlayerId(playerIdToUse)
+      
+      // Save player data to localStorage for persistent session
+      localStorage.setItem("arcadePlayerId", playerIdToUse)
+      localStorage.setItem("arcadePlayerName", data.name || name)
+      
+      // Move to QR code step
+      setStep("qrcode")
+    } catch (err: any) {
+      console.error("Registration error:", err)
+      setError(err.message || "Failed to register. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -98,8 +121,8 @@ export default function PlayerLogin() {
                 </div>
                 {error && <p className="text-destructive text-sm">{error}</p>}
               </div>
-              <Button className="w-full mt-6" type="submit">
-                Generate QR Code
+              <Button className="w-full mt-6" type="submit" disabled={isLoading}>
+                {isLoading ? "Processing..." : "Generate QR Code"}
               </Button>
             </motion.form>
           ) : (

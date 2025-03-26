@@ -7,35 +7,60 @@ import { ArrowLeft, Trophy } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-// Mock leaderboard data
-const mockLeaderboardData = [
-  { id: "player1", name: "Alex", totalScore: 2450, rank: 1 },
-  { id: "player2", name: "Jordan", totalScore: 2320, rank: 2 },
-  { id: "player3", name: "Taylor", totalScore: 1570, rank: 3 },
-  { id: "player4", name: "Casey", totalScore: 1490, rank: 4 },
-  { id: "player5", name: "Riley", totalScore: 1350, rank: 5 },
-  { id: "player6", name: "Morgan", totalScore: 1240, rank: 6 },
-  { id: "player7", name: "Jamie", totalScore: 1120, rank: 7 },
-  { id: "player8", name: "Quinn", totalScore: 980, rank: 8 },
-  { id: "player9", name: "Avery", totalScore: 870, rank: 9 },
-  { id: "player10", name: "Dakota", totalScore: 760, rank: 10 },
-]
+// Player type definition
+interface Player {
+  _id: string;
+  playerId?: string;
+  name: string;
+  totalScore: number;
+  scores: Array<{
+    gameId: string;
+    score: number;
+    playedAt: string;
+  }>;
+}
 
 export default function Leaderboard() {
-  const [leaderboardData, setLeaderboardData] = useState<any[]>([])
+  const [leaderboardData, setLeaderboardData] = useState<Player[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      // In a real app, fetch from API
-      // For demo, use mock data
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setLeaderboardData(mockLeaderboardData)
-      setIsLoading(false)
+      try {
+        setIsLoading(true)
+        // Fetch real data from API
+        const response = await fetch('/api/players')
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch leaderboard data')
+        }
+        
+        const data = await response.json()
+        console.log('Leaderboard data:', data)
+        
+        // Sort by total score if needed (the API should already return sorted data)
+        const sortedData = data.sort((a: Player, b: Player) => 
+          (b.totalScore || 0) - (a.totalScore || 0)
+        )
+        
+        setLeaderboardData(sortedData)
+      } catch (err) {
+        console.error('Error fetching leaderboard:', err)
+        setError('Failed to load leaderboard data. Please try again later.')
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     fetchLeaderboard()
   }, [])
+
+  // Calculate rank for each player
+  const rankedPlayers = leaderboardData.map((player, index) => ({
+    ...player,
+    rank: index + 1
+  }))
 
   return (
     <div className="min-h-screen arcade-bg p-4">
@@ -62,12 +87,23 @@ export default function Leaderboard() {
               <div className="flex justify-center p-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
               </div>
+            ) : error ? (
+              <div className="text-center p-6 text-destructive">
+                <p>{error}</p>
+                <Button onClick={() => window.location.reload()} className="mt-4">
+                  Try Again
+                </Button>
+              </div>
+            ) : rankedPlayers.length === 0 ? (
+              <div className="text-center p-6 text-muted-foreground">
+                <p>No players have scored yet. Be the first!</p>
+              </div>
             ) : (
               <div className="space-y-6">
                 <div className="grid grid-cols-3 gap-4 mb-6">
-                  {leaderboardData.slice(0, 3).map((player, index) => (
+                  {rankedPlayers.slice(0, 3).map((player, index) => (
                     <motion.div
-                      key={player.id}
+                      key={player._id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -88,7 +124,7 @@ export default function Leaderboard() {
                             <Trophy className="h-6 w-6" />
                           </div>
                           <div className="text-lg font-bold mb-1">{player.name}</div>
-                          <div className="text-2xl font-bold text-primary neon-text">{player.totalScore}</div>
+                          <div className="text-2xl font-bold text-primary neon-text">{player.totalScore || 0}</div>
                           <div className="text-xs text-muted-foreground">points</div>
                         </CardContent>
                       </Card>
@@ -97,9 +133,9 @@ export default function Leaderboard() {
                 </div>
 
                 <div className="space-y-3">
-                  {leaderboardData.slice(3).map((player, index) => (
+                  {rankedPlayers.slice(3).map((player, index) => (
                     <motion.div
-                      key={player.id}
+                      key={player._id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: 0.3 + index * 0.05 }}
@@ -112,7 +148,7 @@ export default function Leaderboard() {
                           <div className="font-medium">{player.name}</div>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg font-bold text-primary">{player.totalScore}</div>
+                          <div className="text-lg font-bold text-primary">{player.totalScore || 0}</div>
                           <div className="text-xs text-muted-foreground">points</div>
                         </div>
                       </div>
