@@ -12,10 +12,10 @@ const DEFAULT_GAMES = [
   },
   {
     id: "game2",
-    name: "Pac-Man",
-    description: "Navigate through a maze while eating dots and avoiding ghosts.",
+    name: " Brick Breaker Blitz",
+    description: "Smash your way to victory in Brick Breaker Blitz, a classic ball-bouncing challenge where you'll shatter bricks and clear the board!",
     instructions:
-      "Use the joystick to navigate through the maze. Eat all dots to complete the level. Power pellets allow you to eat ghosts temporarily.",
+      "Smash your way to victory in Brick Breaker Blitz, a classic ball-bouncing challenge where you'll shatter bricks and clear the board!",
   },
   {
     id: "game3",
@@ -26,13 +26,20 @@ const DEFAULT_GAMES = [
   },
   {
     id: "game4",
-    name: "Dance Dance Revolution",
-    description: "Step on the arrows in time with the music.",
+    name: "Git game",
+    description: "Embark on a thrilling Evolution Odyssey, navigating treacherous terrain, avoiding deadly snakes, and guiding your primitive hero to safety!",
     instructions:
-      "Step on the corresponding arrow panels when they reach the top of the screen. Timing affects your score.",
+      "Jump and double jump through obstacles with SPACE. Run forward with the RIGHT ARROW. Avoid snakes and sea at all costs while collecting coins - survival is key!",
   },
   {
     id: "game5",
+    name: "Evolution Odyssey",
+    description: "Embark on a thrilling Evolution Odyssey, navigating treacherous terrain, avoiding deadly snakes, and guiding your primitive hero to safety!",
+    instructions:
+      "Jump and double jump through obstacles with SPACE. Run forward with the RIGHT ARROW. Avoid snakes and sea at all costs while collecting coins - survival is key!",
+  },
+  {
+    id: "game6",
     name: "Skee-Ball",
     description: "Roll balls up an inclined lane to get them into targets.",
     instructions: "Roll the ball up the lane aiming for the highest point targets. Each game gives you 9 balls.",

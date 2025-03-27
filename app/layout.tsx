@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Heart, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,22 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+
+           <header className="py-4 px-6 border-b">
+            <div className="container mx-auto flex justify-center">
+              <Link href="/">
+                <Image
+                  src="/whitelogo.png" // Path to your logo in public folder
+                  alt="Arcade Leaderboard"
+                  width={180} // Adjust based on your logo dimensions
+                  height={2} // Adjust based on your logo dimensions
+                  className="hover:scale-105 transition-transform duration-200"
+                  priority
+                />
+              </Link>
+            </div>
+          </header>
+
           <main className="min-h-[calc(100vh-40px)]">
             {children}
           </main>
