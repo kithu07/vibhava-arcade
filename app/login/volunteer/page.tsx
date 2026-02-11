@@ -19,7 +19,7 @@ export default function VolunteerLogin() {
   const [isLoading, setIsLoading] = useState(false)
 
   // In a real app, this would be stored securely and verified on the server
-  const VOLUNTEER_PASSWORD = "arcade2025"
+  const VOLUNTEER_PASSWORD = "arcade2026"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
