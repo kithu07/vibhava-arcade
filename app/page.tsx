@@ -7,6 +7,7 @@ import { Gamepad2, QrCode, Trophy, Users } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import { GamesList } from "@/components/GamesList"
 
 export default function Home() {
   const [isHovering, setIsHovering] = useState<string | null>(null)
@@ -27,7 +28,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen arcade-bg flex flex-col items-center justify-center p-4 relative">     
+    <div className="min-h-screen arcade-bg flex flex-col items-center justify-center p-4 relative">
       <div className="text-center mb-8 fade-in">
         <h1 className="text-4xl md:text-6xl font-bold neon-text mb-2">ARCADE</h1>
         <p className="text-primary text-lg md:text-xl">Track your scores. Claim your glory.</p>
@@ -117,7 +118,11 @@ export default function Home() {
           </Link>
         </motion.div>
       </motion.div>
-    </div>
+
+      <div className="w-full max-w-6xl mt-12 mb-8 border-t border-muted pt-8">
+        <GamesList />
+      </div>
+    </div >
   )
 }
 

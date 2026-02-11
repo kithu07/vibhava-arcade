@@ -5,44 +5,31 @@ import clientPromise from "@/lib/mongodb"
 const DEFAULT_GAMES = [
   {
     id: "game1",
-    name: "Space Invaders",
-    description: "Shoot down waves of alien invaders before they reach you.",
-    instructions:
-      "Use the joystick to move left and right. Press the button to shoot. Destroy all aliens to advance to the next level.",
+    name: "Slideout 🏂",
+    description: "A fast-paced 2D snowboarding game with endless, ever-changing slopes where speed and precision decide survival.",
+    instructions: "Up Arrow to move & boost, Left/Right Arrows to flip mid-air, avoid landing on your head, earn distance points + 100 per flip.",
+    developedBy: "Aditya Anand",
   },
   {
     id: "game2",
-    name: " Brick Breaker Blitz",
-    description: "Smash your way to victory in Brick Breaker Blitz, a classic ball-bouncing challenge where you'll shatter bricks and clear the board!",
-    instructions:
-      "Smash your way to victory in Brick Breaker Blitz, a classic ball-bouncing challenge where you'll shatter bricks and clear the board!",
+    name: "Maze of Mires 🧭",
+    description: "Guide Ginger through a cursed swamp labyrinth, survive five deadly levels, and claim the hidden treasure.",
+    instructions: "Arrow Keys to move, Space/Up to jump, Up/Down to climb, Right Click to shoot, avoid hazards and collect coins.",
+    developedBy: "Aditya Anand",
   },
   {
     id: "game3",
-    name: "Street Fighter",
-    description: "Battle against opponents using various fighting techniques.",
-    instructions:
-      "Use the joystick for movement and buttons for different attacks. Perform special moves by combining joystick movements with button presses.",
+    name: "Pizza Rush 🍕🚙",
+    description: "A delivery-life simulator where timing, speed, and reputation determine your survival.",
+    instructions: "Arrow Keys/WASD to drive, pick up pizzas, deliver within one minute, avoid crashes, maintain rating.",
+    developedBy: "Aditya Anand",
   },
   {
     id: "game4",
-    name: "Git game",
-    description: "Embark on a thrilling Evolution Odyssey, navigating treacherous terrain, avoiding deadly snakes, and guiding your primitive hero to safety!",
-    instructions:
-      "Jump and double jump through obstacles with SPACE. Run forward with the RIGHT ARROW. Avoid snakes and sea at all costs while collecting coins - survival is key!",
-  },
-  {
-    id: "game5",
-    name: "Evolution Odyssey",
-    description: "Embark on a thrilling Evolution Odyssey, navigating treacherous terrain, avoiding deadly snakes, and guiding your primitive hero to safety!",
-    instructions:
-      "Jump and double jump through obstacles with SPACE. Run forward with the RIGHT ARROW. Avoid snakes and sea at all costs while collecting coins - survival is key!",
-  },
-  {
-    id: "game6",
-    name: "Skee-Ball",
-    description: "Roll balls up an inclined lane to get them into targets.",
-    instructions: "Roll the ball up the lane aiming for the highest point targets. Each game gives you 9 balls.",
+    name: "Protocol YOLO 🚀",
+    description: "Survive endless enemy waves in deep space with only one emergency teleport.",
+    instructions: "Arrow Keys to move, Space to fire, Left Shift for one-time teleport, destroy enemies and survive.",
+    developedBy: "Aditya Anand",
   },
 ]
 
@@ -50,18 +37,18 @@ export async function GET() {
   try {
     const client = await clientPromise
     const db = client.db()
-    
+
     // Check if we have games in the database
     const gamesCount = await db.collection("games").countDocuments()
-    
+
     // If no games, initialize with default games
     if (gamesCount === 0) {
       await db.collection("games").insertMany(DEFAULT_GAMES)
     }
-    
+
     // Fetch games from database
     const games = await db.collection("games").find({}).toArray()
-    
+
     return NextResponse.json(games)
   } catch (error) {
     console.error("Error fetching games:", error)
@@ -80,11 +67,11 @@ export async function POST(request: Request) {
 
     const client = await clientPromise
     const db = client.db()
-    
+
     // Generate a unique ID for the game
     const gameCount = await db.collection("games").countDocuments()
     const gameId = `game${gameCount + 1}`
-    
+
     // Create the game
     const result = await db.collection("games").insertOne({
       id: gameId,

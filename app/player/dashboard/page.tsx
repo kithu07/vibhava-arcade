@@ -331,10 +331,6 @@ export default function PlayerDashboard() {
                                     <h4 className="font-medium">{game.name}</h4>
                                     <p className="text-sm text-muted-foreground mt-1">{game.description}</p>
                                   </div>
-                                  <Button variant="outline" size="sm" className="shrink-0">
-                                    <Info className="h-4 w-4 mr-1" />
-                                    Details
-                                  </Button>
                                 </div>
                               </CardContent>
                             </Card>
