@@ -28,6 +28,7 @@ interface Score {
 // Player type definition
 interface Player {
   _id: string;
+  playerId?: string;
   name: string;
   phone: string;
   scores: Score[];
@@ -66,7 +67,7 @@ export default function PlayerDashboard() {
     try {
       console.log("Fetching player data with ID:", id);
       const response = await fetch(`/api/players/${id}`);
-      
+
       if (!response.ok) {
         if (response.status === 404) {
           console.error("Player not found with ID:", id);
@@ -77,7 +78,7 @@ export default function PlayerDashboard() {
         }
         throw new Error('Failed to fetch player data');
       }
-      
+
       const data = await response.json();
       console.log("Player data received:", data);
       setPlayer(data);
@@ -96,9 +97,9 @@ export default function PlayerDashboard() {
       if (!response.ok) {
         throw new Error('Failed to fetch leaderboard');
       }
-      
+
       const data = await response.json();
-      
+
       // Find player's rank
       const playerRank = data.findIndex((p: Player) => p._id === id) + 1;
       setRank(playerRank > 0 ? playerRank : null);
@@ -113,19 +114,19 @@ export default function PlayerDashboard() {
     try {
       setIsLeaderboardLoading(true)
       const response = await fetch('/api/players')
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch leaderboard')
       }
-      
+
       const data = await response.json()
       console.log("Leaderboard data:", data)
-      
+
       // Sort by total score (the API should already return sorted data)
-      const sortedData = data.sort((a: Player, b: Player) => 
+      const sortedData = data.sort((a: Player, b: Player) =>
         (b.totalScore || 0) - (a.totalScore || 0)
       )
-      
+
       setLeaderboardData(sortedData)
     } catch (error) {
       console.error('Error fetching leaderboard:', error)
@@ -137,7 +138,7 @@ export default function PlayerDashboard() {
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
-      
+
       try {
         // Check if player is logged in
         const id = localStorage.getItem("arcadePlayerId")
@@ -376,7 +377,7 @@ export default function PlayerDashboard() {
               </Card>
             </motion.div>
           </TabsContent>
-          
+
           <TabsContent value="leaderboard">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
               <Card className="border-2 border-muted">
@@ -399,23 +400,21 @@ export default function PlayerDashboard() {
                   ) : (
                     <div className="space-y-3">
                       {leaderboardData.slice(0, 10).map((leaderPlayer, index) => {
-                        const isCurrentPlayer = playerId === leaderPlayer.playerId || 
+                        const isCurrentPlayer = playerId === leaderPlayer.playerId ||
                           playerId === leaderPlayer._id;
-                        
+
                         return (
-                          <div 
-                            key={leaderPlayer._id} 
-                            className={`flex items-center p-3 rounded-lg ${
-                              isCurrentPlayer ? "bg-primary/10 border border-primary/30" : "bg-muted/30"
-                            }`}
+                          <div
+                            key={leaderPlayer._id}
+                            className={`flex items-center p-3 rounded-lg ${isCurrentPlayer ? "bg-primary/10 border border-primary/30" : "bg-muted/30"
+                              }`}
                           >
-                            <div className={`w-8 h-8 flex items-center justify-center rounded-full mr-3 ${
-                              index < 3 ? 
-                                index === 0 ? "bg-yellow-500/20 text-yellow-500" : 
-                                index === 1 ? "bg-gray-300/20 text-gray-300" : 
-                                "bg-amber-600/20 text-amber-600" 
+                            <div className={`w-8 h-8 flex items-center justify-center rounded-full mr-3 ${index < 3 ?
+                                index === 0 ? "bg-yellow-500/20 text-yellow-500" :
+                                  index === 1 ? "bg-gray-300/20 text-gray-300" :
+                                    "bg-amber-600/20 text-amber-600"
                                 : "bg-muted text-muted-foreground"
-                            }`}>
+                              }`}>
                               {index + 1}
                             </div>
                             <div className="flex-1">

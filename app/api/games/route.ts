@@ -31,6 +31,20 @@ const DEFAULT_GAMES = [
     instructions: "Arrow Keys to move, Space to fire, Left Shift for one-time teleport, destroy enemies and survive.",
     developedBy: "Aditya Anand",
   },
+  {
+    id: "game5",
+    name: "Evolution Odyssey 🎮",
+    description: "Embark on a 2D platforming adventure where you collect coins, dodge enemies, and survive with limited lives to rise to the top.",
+    instructions: "Arrow Keys to move, Space to jump across platforms, avoid enemies and water, collect coins, and survive with 3 lives.",
+    developedBy: "Keerthana D S",
+  },
+  {
+    id: "game6",
+    name: "Pixel Guy",
+    description: "A 2D Unity platformer with four progressively challenging levels focused on timing, coordination, and precision-based movement.",
+    instructions: "Use movement controls to navigate platforms, avoid obstacles, collect items for score, and progress through increasingly difficult levels.",
+    developedBy: "Nivedh krishna VM",
+  },
 ]
 
 export async function GET() {
@@ -38,12 +52,18 @@ export async function GET() {
     const client = await clientPromise
     const db = client.db()
 
-    // Check if we have games in the database
-    const gamesCount = await db.collection("games").countDocuments()
+    // Ensure all default games exist in the database
+    // We use bulkWrite to efficiently update/insert games
+    if (DEFAULT_GAMES.length > 0) {
+      const operations = DEFAULT_GAMES.map(game => ({
+        updateOne: {
+          filter: { id: game.id },
+          update: { $set: game },
+          upsert: true
+        }
+      }))
 
-    // If no games, initialize with default games
-    if (gamesCount === 0) {
-      await db.collection("games").insertMany(DEFAULT_GAMES)
+      await db.collection("games").bulkWrite(operations)
     }
 
     // Fetch games from database
