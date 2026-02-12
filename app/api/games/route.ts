@@ -64,7 +64,7 @@ const DEFAULT_GAMES = [
     name: "Block Game ▀",
     description: "A fast-paced tile-matching puzzle game where the primary goal is to bring order to chaos by arranging falling, four-block shapes.",
     instructions: "Use the left and right arrow keys to move the blocks also rotate the blocks and stack them at the bottom and earn score as you clear each horizontal rows.",
-    developedBy: "Keerthana D S",
+    developedBy: "Amal Vinayan",
   },
 ]
 
