@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Trophy, QrCode, Gamepad2, ArrowLeft, Info } from "lucide-react"
 import Link from "next/link"
@@ -245,10 +246,29 @@ export default function PlayerDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col items-center">
-                <div className="bg-white p-2 rounded-lg mb-2">
-                  <QRCode value={playerId} size={100} />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div className="bg-white p-2 rounded-lg mb-2 cursor-pointer hover:scale-105 transition-transform" role="button" aria-label="Enlarge QR Code">
+                      <QRCode value={playerId} size={100} />
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md bg-card border-primary/50">
+                    <DialogHeader>
+                      <DialogTitle className="text-center neon-text text-2xl">Player Identity</DialogTitle>
+                      <DialogDescription className="text-center text-muted-foreground">
+                        Scanner trouble? Use the enlarged code or ID below.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex flex-col items-center justify-center p-6 bg-white rounded-lg mt-2">
+                      <QRCode value={playerId} size={250} />
+                      <p className="font-bold text-black text-3xl mt-6 tracking-widest uppercase">{playerId}</p>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <div className="text-center mt-2">
+                  <p className="text-sm text-muted-foreground">Player ID</p>
+                  <p className="font-mono text-lg font-bold text-primary tracking-wider">{playerId}</p>
                 </div>
-                <p className="text-sm text-center">Scan at game stations</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -410,10 +430,10 @@ export default function PlayerDashboard() {
                               }`}
                           >
                             <div className={`w-8 h-8 flex items-center justify-center rounded-full mr-3 ${index < 3 ?
-                                index === 0 ? "bg-yellow-500/20 text-yellow-500" :
-                                  index === 1 ? "bg-gray-300/20 text-gray-300" :
-                                    "bg-amber-600/20 text-amber-600"
-                                : "bg-muted text-muted-foreground"
+                              index === 0 ? "bg-yellow-500/20 text-yellow-500" :
+                                index === 1 ? "bg-gray-300/20 text-gray-300" :
+                                  "bg-amber-600/20 text-amber-600"
+                              : "bg-muted text-muted-foreground"
                               }`}>
                               {index + 1}
                             </div>

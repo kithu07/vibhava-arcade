@@ -40,10 +40,24 @@ const DEFAULT_GAMES = [
   },
   {
     id: "game6",
-    name: "Pixel Guy",
+    name: "Pixel Guy👾",
     description: "A 2D Unity platformer with four progressively challenging levels focused on timing, coordination, and precision-based movement.",
     instructions: "Use movement controls to navigate platforms, avoid obstacles, collect items for score, and progress through increasingly difficult levels.",
     developedBy: "Nivedh krishna VM",
+  },
+  {
+    id: "game7",
+    name: "Brick Bounce 🏓",
+    description: "Control the paddle, keep the ball in play, and break all the bricks to score points in this fast-paced arcade classic.",
+    instructions: "Use the Left and Right Arrow keys to move the paddle, bounce the ball to hit and destroy all bricks, and don’t let the ball miss the paddle — or you lose!",
+    developedBy: "Keerthana D S",
+  },
+  {
+    id: "game8",
+    name: "Dino IRL 🦖",
+    description: "A reimagined Chrome Dino game where you are the dinosaur. No keyboard. No space bar. Just you, your jumps, and the obstacles ahead.",
+    instructions: "Stand in front of your camera and jump to make the dino jump. Your movements are tracked in real time — dodge obstacles by physically jumping and survive as long as you can!",
+    developedBy: "Keerthana D S",
   },
 ]
 
