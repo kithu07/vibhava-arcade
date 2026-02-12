@@ -52,15 +52,15 @@ const DEFAULT_GAMES = [
     instructions: "Use the Left and Right Arrow keys to move the paddle, bounce the ball to hit and destroy all bricks, and don’t let the ball miss the paddle — or you lose!",
     developedBy: "Keerthana D S",
   },
+  // {
+  //   id: "game8",
+  //   name: "Dino IRL 🦖",
+  //   description: "A reimagined Chrome Dino game where you are the dinosaur. No keyboard. No space bar. Just you, your jumps, and the obstacles ahead.",
+  //   instructions: "Stand in front of your camera and jump to make the dino jump. Your movements are tracked in real time — dodge obstacles by physically jumping and survive as long as you can!",
+  //   developedBy: "Keerthana D S",
+  // },
   {
     id: "game8",
-    name: "Dino IRL 🦖",
-    description: "A reimagined Chrome Dino game where you are the dinosaur. No keyboard. No space bar. Just you, your jumps, and the obstacles ahead.",
-    instructions: "Stand in front of your camera and jump to make the dino jump. Your movements are tracked in real time — dodge obstacles by physically jumping and survive as long as you can!",
-    developedBy: "Keerthana D S",
-  },
-  {
-    id: "game9",
     name: "Block Game ▀",
     description: "A fast-paced tile-matching puzzle game where the primary goal is to bring order to chaos by arranging falling, four-block shapes.",
     instructions: "Use the left and right arrow keys to move the blocks also rotate the blocks and stack them at the bottom and earn score as you clear each horizontal rows.",
